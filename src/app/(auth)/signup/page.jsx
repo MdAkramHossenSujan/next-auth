@@ -6,8 +6,9 @@ import { useForm } from "react-hook-form";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { toast } from "react-hot-toast";
 import submitUsers from "@/lib/userSubmit";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import GoogleLoginBtn from "@/components/shared/googleLogin";
+import Logo from "@/components/shared/Logo";
 
 export default function Signup() {
     const [showPassword, setShowPassword] = useState(false);
@@ -58,13 +59,9 @@ export default function Signup() {
 
             {/* Right side: Form + Logo */}
             <div className="flex flex-1 flex-col items-center justify-center p-8">
-                {/* Logo */}
-                <Link href={'/'}>
-                    <div className="fixed top-20">
-                        <h1 className="text-3xl font-bold">Auth<span className="font-mono text-gray-600">One</span></h1>
-                    </div>
-                </Link>
-
+               <div className="fixed top-20">
+                 <Logo/>
+               </div>
                 {/* Form */}
                 <div className="w-full max-w-lg bg-white rounded-xl shadow-lg p-8">
                     <h2 className="text-2xl font-bold text-gray-800 mb-6">
@@ -159,6 +156,14 @@ export default function Signup() {
                             {loading ? 'Creating your account' : 'Register'}
                         </Button>
                     </form>
+                    <div className="flex items-center gap-2 my-2">
+                            <div className="flex-grow border-t"></div>
+                            <span className="text-gray-500">OR</span>
+                            <div className="flex-grow border-t"></div>
+                        </div>
+
+                        {/* Google Login */}
+                        <GoogleLoginBtn />
                 </div>
             </div>
         </div>
