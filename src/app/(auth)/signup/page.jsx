@@ -37,6 +37,7 @@ export default function Signup() {
             const result = await submitUsers(data);
             if (result?.acknowledged) {
                 toast.success("User created successfully!");
+                 router.push('/')
                 //After signing up user will be able to login
                 const res = await signIn("credentials", {
                     redirect: false,
@@ -49,7 +50,6 @@ export default function Signup() {
                     router.push("/login");
                 } else {
                 }
-                reset();
                 setLoading(false);
             } else {
                 setLoading(false)
