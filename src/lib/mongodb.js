@@ -15,7 +15,7 @@ export async function mongodbConnect(collection) {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
     // Send a console to confirm a successful connection
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    // console.log("Pinged your deployment. You successfully connected to MongoDB!");
     const db = client.db('nextauthuser');
   return db.collection(collection);
   } catch {

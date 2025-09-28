@@ -4,11 +4,13 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button"; // ShadCN Button
 import Logo from "@/components/shared/Logo";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const router = useRouter()
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -24,9 +26,14 @@ export default function Login() {
     });
 
     if (res?.error) {
+      setLoading(false)
       setError("Invalid email or password!");
+      toast.error("❌ Invalid email or password!"); // show error toast
+    } else {
+      setLoading(false);
+      toast.success("✅ Logged in successfully!"); // show success toast
+      router.push('/')
     }
-    setLoading(false);
   };
 
   return (

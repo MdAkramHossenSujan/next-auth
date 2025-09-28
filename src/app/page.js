@@ -1,4 +1,5 @@
 'use client';
+import Logo from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
@@ -6,8 +7,8 @@ import { useState } from "react";
 
 export default function Home() {
   const { data: session, status } = useSession();
-   const [loading, setLoading] = useState(false);
-   console.log(session)
+  const [loading, setLoading] = useState(false);
+  // console.log(session)
   const handleLogout = async () => {
     setLoading(true);
     await signOut({ callbackUrl: "/login" }); // redirect after sign out
@@ -15,10 +16,19 @@ export default function Home() {
   };
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-lg rounded-2xl flex flex-col items-center">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-800 text-center mb-6">
-          {session?.user ? `Welcome back, ${session.user.name}!` : "Welcome to AuthOne"}
-        </h1>
+      <div className="w-full max-w-2xl rounded-2xl flex flex-col items-center">
+        {session?.user ? (
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-800 text-center mb-2">
+            Welcome back, {session.user.name}!
+          </h1>
+        ) : (
+          <div className="flex flex-col items-center">
+            <span className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">
+              Welcome to <Logo className={'inline-block'} />
+            </span>
+          
+          </div>
+        )}
 
         {session?.user ? (
           <div className="flex flex-col items-center gap-4">

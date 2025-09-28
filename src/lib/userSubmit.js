@@ -9,6 +9,6 @@ export default async function submitUsers(user) {
         insertedId: inserted.insertedId.toString(), // ✅ convert ObjectId to string
     };
 
-    console.log(inserted)
+    // console.log(inserted)
     return plainResult
 }
