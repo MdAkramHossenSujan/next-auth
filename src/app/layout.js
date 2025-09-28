@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import NextAuthProviders from "@/providers/NextAuthProviders";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,6 +26,7 @@ export default function RootLayout({ children }) {
       >
        <NextAuthProviders>
          {children}
+          <Toaster position="top-center" reverseOrder={false} />
        </NextAuthProviders>
       </body>
     </html>

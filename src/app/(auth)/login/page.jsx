@@ -1,5 +1,6 @@
 "use client";
 
+import { signIn } from "next-auth/react";
 import { useState } from "react";
 
 export default function Login() {
@@ -13,7 +14,17 @@ export default function Login() {
 
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
-
+    console.log(data)
+  const res = await signIn("credentials", {
+      redirect: false,        // Important: don't redirect automatically
+      email: data.email,
+      password: data.password,
+    });
+     if (res?.error) {
+      setError("❌ Invalid email or password!");
+    } else {
+      alert("✅ Logged in successfully!");
+    }
   };
 
   return (
