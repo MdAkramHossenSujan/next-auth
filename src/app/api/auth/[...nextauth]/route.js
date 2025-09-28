@@ -2,6 +2,7 @@ import { mongodbConnect } from "@/lib/mongodb";
 import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
+export const dynamic = "force-dynamic"
 const handler = NextAuth({
     providers: [
         CredentialsProvider({
@@ -35,14 +36,14 @@ const handler = NextAuth({
     ],
     callbacks: {
         async jwt({ token, user, account, profile }) {
-    // First time login with a provider
-    if (account && profile) {
-      token.id = profile.id || user?.id;
-      token.name = profile.name || user?.name;
-      token.email = profile.email || user?.email;
-    }
-    return token;
-  },
+            // For first-time login via any provider
+            if (user) {
+                token.id = user._id || user.id;
+                token.name = user.name;
+                token.email = user.email;
+            }
+            return token;
+        },
         //This session callback is needed to user stay in the website. 
         async session({ session, token }) {
             if (token) {
