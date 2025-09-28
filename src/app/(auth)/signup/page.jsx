@@ -9,11 +9,14 @@ import submitUsers from "@/lib/userSubmit";
 import { Button } from "@/components/ui/button";
 import GoogleLoginBtn from "@/components/shared/googleLogin";
 import Logo from "@/components/shared/Logo";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function Signup() {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [loading, setLoading] = useState(false);
+    const router = useRouter();
     const {
         register,
         handleSubmit,
@@ -25,6 +28,7 @@ export default function Signup() {
     const onSubmit = async (data) => {
         setLoading(true);
         if (data.password !== data.confirmPassword) {
+            setLoading(false)
             toast.error("Passwords do not match!");
             return;
         }
@@ -33,12 +37,25 @@ export default function Signup() {
             const result = await submitUsers(data);
             if (result?.acknowledged) {
                 toast.success("User created successfully!");
+                const res = await signIn("credentials", {
+                    redirect: false,
+                    email: data.email,
+                    password: data.password,
+                });
+                if (res?.error) {
+                    setLoading(false)
+                    toast.error("Signup successful but failed to log in. Please login manually.");
+                    router.push("/login");
+                } else {
+                }
                 reset();
                 setLoading(false);
             } else {
+                setLoading(false)
                 toast.error("Failed to create user.");
             }
         } catch (err) {
+            setLoading(false)
             console.error(err);
             toast.error("An error occurred while creating user.");
         }
@@ -59,9 +76,9 @@ export default function Signup() {
 
             {/* Right side: Form + Logo */}
             <div className="flex flex-1 flex-col items-center justify-center p-8">
-               <div className="fixed top-20">
-                 <Logo/>
-               </div>
+                <div>
+                    <Logo />
+                </div>
                 {/* Form */}
                 <div className="w-full max-w-lg bg-white rounded-xl shadow-lg p-8">
                     <h2 className="text-2xl font-bold text-gray-800 mb-6">
@@ -104,52 +121,59 @@ export default function Signup() {
                         </div>
 
                         {/* Password */}
-                        <div className="relative">
+                        <div>
                             <label className="block text-sm font-medium text-gray-800 mb-1">
                                 Password
                             </label>
-                            <input
+                           <div  className="relative">
+                             <input
                                 {...register("password", {
                                     required: "Password is required",
-                                    minLength: { value: 6, message: "Password must be at least 6 characters" }
+                                    minLength: { value: 6, message: "Password must be at least 6 characters" },
                                 })}
                                 type={showPassword ? "text" : "password"}
                                 placeholder="********"
-                                className="w-full rounded-lg border border-gray-400 p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                className="w-full rounded-lg border border-gray-400 p-3 pr-10 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             />
-                            {errors.password && (
-                                <p className="text-red-600 text-xs mt-1">{errors.password.message}</p>
-                            )}
-
+                              {/* Eye Icon */}
                             <div
-                                className="absolute right-3 top-7/10 -translate-y-1/2 cursor-pointer text-gray-500"
+                                className="absolute right-3 top-4 cursor-pointer text-gray-500"
                                 onClick={() => setShowPassword((prev) => !prev)}
                             >
                                 {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
                             </div>
+                           </div>
+                          
+                            {errors.password && (
+                                <p className="text-red-600 text-xs mt-1">{errors.password.message}</p>
+                            )}
                         </div>
 
                         {/* Confirm Password */}
-                        <div className="relative">
+                        <div >
                             <label className="block text-sm font-medium text-gray-800 mb-1">
                                 Confirm Password
                             </label>
-                            <input
+                           <div className="relative">
+                             <input
                                 {...register("confirmPassword", { required: "Please confirm your password" })}
                                 type={showConfirmPassword ? "text" : "password"}
                                 placeholder="********"
-                                className="w-full rounded-lg border border-gray-400 p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                className="w-full rounded-lg border border-gray-400 p-3 pr-10 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             />
+                            {/* Eye Icon */}
                             <div
-                                className="absolute right-3 top-7/10 -translate-y-1/2 cursor-pointer text-gray-500"
+                                className="absolute right-3 top-4 cursor-pointer text-gray-500"
                                 onClick={() => setShowConfirmPassword((prev) => !prev)}
                             >
                                 {showConfirmPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
                             </div>
+                           </div>
                             {errors.confirmPassword && (
                                 <p className="text-red-600 text-xs mt-1">{errors.confirmPassword.message}</p>
                             )}
                         </div>
+
 
                         {/* Submit Button */}
                         <Button disabled={loading}>
@@ -157,13 +181,13 @@ export default function Signup() {
                         </Button>
                     </form>
                     <div className="flex items-center gap-2 my-2">
-                            <div className="flex-grow border-t"></div>
-                            <span className="text-gray-500">OR</span>
-                            <div className="flex-grow border-t"></div>
-                        </div>
+                        <div className="flex-grow border-t"></div>
+                        <span className="text-gray-500">OR</span>
+                        <div className="flex-grow border-t"></div>
+                    </div>
 
-                        {/* Google Login */}
-                        <GoogleLoginBtn />
+                    {/* Google Login */}
+                    <GoogleLoginBtn />
                 </div>
             </div>
         </div>

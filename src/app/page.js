@@ -7,6 +7,7 @@ import { useState } from "react";
 export default function Home() {
   const { data: session, status } = useSession();
    const [loading, setLoading] = useState(false);
+   console.log(session)
   const handleLogout = async () => {
     setLoading(true);
     await signOut({ callbackUrl: "/login" }); // redirect after sign out

@@ -26,6 +26,7 @@ const handler = NextAuth({
                 return user; // NextAuth will create a session for this user
             }
         }),
+        //Separate provider for google we can add more if we want
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,

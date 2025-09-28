@@ -20,6 +20,6 @@ export async function mongodbConnect(collection) {
   return db.collection(collection);
   } catch {
     // Ensures that the client will close when you finish/error
-     console.error("❌ MongoDB connection failed:", error);
+     console.error("MongoDB connection failed:", error);
   }
 }
