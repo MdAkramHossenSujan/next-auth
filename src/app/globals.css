@@ -119,3 +119,16 @@
   }
 }
 
+:root {
+  --font-geist-sans: 'Geist', sans-serif;
+  --font-geist-mono: 'Geist Mono', monospace;
+}
+
+body {
+  font-family: var(--font-geist-sans);
+}
+
+code, pre, .mono {
+  font-family: var(--font-geist-mono);
+}
+
